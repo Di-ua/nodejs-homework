@@ -1,24 +1,31 @@
 const express = require('express')
 const router = express.Router()
 
-router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+const ctrl = require("../../controllers/contacts.js");
+const {
+  validationCreateContact,
+  validationUpdateContact,
+  validationUpdateStatusContact,
+  validateMongoId,
+} = require("../api/validation");
 
-router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.use((req, res, next) => {
+  next();
+});
 
-router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router
+  .get("/", ctrl.getAll)
+  .post("/", validationCreateContact, ctrl.addContact);
 
-router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router
+  .get("/:id", validateMongoId, ctrl.getById)
+  .delete("/:id", validateMongoId, ctrl.removeContact)
+  .put("/:id", validateMongoId, validationUpdateContact, ctrl.updateContact);
 
-router.patch('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+router.patch(
+  "/:id/favorite",
+  validationUpdateStatusContact,
+  ctrl.updateStatusContact
+);
 
-module.exports = router
+module.exports = router;
