@@ -1,33 +1,33 @@
-const mongoose = require("mongoose");
-require("dotenv").config({ path: "./routes/.env"});
+const mongoose = require("mongoose"),
+require("dotenv").config({ path: "./routes/.env"}),
 
-const uriDb = process.env.URI_DB;
+const uriDb = process.env.URI_DB,
 
 const db = mongoose.connect(uriDb, {
-  useNewUrlParser: true;
+  useNewUrlParser: true,
   useUnifiedTopology: true,
-  useCreateIndex: true;
-  useFindAndModify: false;
+  useCreateIndex: true,
+  useFindAndModify: false,
   poolsize: 5,
-});
+}),
 
 mongoose.connection.on("connected", () => {
-  console.log(`Database connection successful open on: ${uriDb}`);
-});
+  console.log(`Database connection successful open on: ${uriDb}`),
+}),
 
 mongoose.connection.on("error", (e) => {
-  console.log(`Error mongoose connection ${e.message}`);
-});
+  console.log(`Error mongoose connection ${e.message}`),
+}),
 
   mongoose.connection.on("disconnected", (e) => {
-    console.log(`Mongoose connection ${e.message}`);
-  });
+    console.log(`Mongoose connection ${e.message}`),
+  }),
 
   process.on("SIGINT", async () => {
     mongoose.connection.close(() => {
-      console.log("Connection to DB terminated");
-      process.exit(1);
-    });
-  });
+      console.log("Connection to DB terminated"),
+      process.exit(1),
+    }),
+  }),
 
-  module.exports = db;
+  module.exports = db,
