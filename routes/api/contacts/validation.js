@@ -1,5 +1,5 @@
-const Joi = require('joi'),
-const mongoose = require('mongoose'),
+const Joi = require('joi')
+const mongoose = require('mongoose')
 
 const schemaCreateContact = Joi.object({
   name: Joi.string().min(3).max(30).required(),
@@ -8,7 +8,7 @@ const schemaCreateContact = Joi.object({
   favorite: Joi.boolean(),
 })
   .with('name', 'email')
-  .with('name', 'phone'),
+  .with('name', 'phone')
 
 const schemaUpdateContact = Joi.object({
   name: Joi.string().min(3).max(30).optional(),
@@ -20,20 +20,20 @@ const schemaUpdateContact = Joi.object({
     .optional(),
   phone: Joi.string().optional(),
   favorite: Joi.boolean().optional(),
-}).or('name', 'phone', 'email', 'favorite'),
+}).or('name', 'phone', 'email', 'favorite')
 
 const schemaUpdateStatusContact = Joi.object({
-  favorite: Joi.boolean().required(),
+  favorite: Joi.boolean().required()
 }),
 
 const validate = async (schema, obj, next) => {
   try {
     await schema.validateAsync(obj),
-    next(),
+    next()
   } catch (err) {
     next({
       status: 400,
-      message: err.message.replace(/"/g, ''),
+      message: err.message.replace(/'/g, ''),
     })
   }
 }
@@ -54,7 +54,7 @@ module.exports = {
       return next({
         status: 400,
         message: 'Invalid Id',
-      }),
+      })
     }
     next()
   },

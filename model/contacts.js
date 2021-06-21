@@ -1,10 +1,10 @@
-const { Schema, model } = require("mongoose"),
+const { Schema, model } = require('mongoose'),
 
 const contactSchema = new Schema(
   {
     name: {
       type: String,
-      required: [true, "Set name for contact"],
+      required: [true, 'Set name for contact'],
     },
     email: {
       type: String,
@@ -31,10 +31,10 @@ const contactSchema = new Schema(
   }
 ),
 
-contactSchema.virtual("info").get(function () {
+contactSchema.virtual('info').get(function () {
   return `${this.name} is achievable per phone: ${this.phone} and email: ${this.email}`,
 })
 
-const Contact = model("contact", contactSchema),
+const Contact = model('contact', contactSchema),
 
 module.exports = Contact,
