@@ -1,11 +1,11 @@
 const mongoose = require('mongoose')
-const bcrypt = require('bcryptjs'
-const { Subscription } = require(''../helpers/constants')
-const SALT_WORK_FACTOR = 8;
+const bcrypt = require('bcryptjs')
+const { Subscription } = require('../helpers/constants')
+const SALT_WORK_FACTOR = 8
 
-//const { STARTER, PRO, BUSINESS } = Object.values(Subscription);
+// const { STARTER, PRO, BUSINESS } = Object.values(Subscription);
 
-const Schema = mongoose.Schema;
+const Schema = mongoose.Schema
 
 const userSchema = new Schema({
   password: {
@@ -17,7 +17,7 @@ const userSchema = new Schema({
     required: [true, 'Email is required'],
     unique: true,
     validate(value) {
-      const re = /\S+@\S+\.\S+/g;
+      const re = /\S+@\S+\.\S+/g
       return re.test(String(value).toLowerCase())
     },
   },
@@ -46,6 +46,6 @@ userSchema.methods.isValidPassword = async function (password) {
   return await bcrypt.compare(password, this.password)
 }
 
-const User = mongoose.model('user', userSchema);
+const User = mongoose.model('user', userSchema)
 
 module.exports = User

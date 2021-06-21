@@ -23,12 +23,12 @@ const schemaUpdateContact = Joi.object({
 }).or('name', 'phone', 'email', 'favorite')
 
 const schemaUpdateStatusContact = Joi.object({
-  favorite: Joi.boolean().required()
-}),
+  favorite: Joi.boolean().required(),
+})
 
 const validate = async (schema, obj, next) => {
   try {
-    await schema.validateAsync(obj),
+    await schema.validateAsync(obj)
     next()
   } catch (err) {
     next({
