@@ -1,9 +1,10 @@
 const mongoose = require('mongoose')
+const gr = require('gravatar')
 const bcrypt = require('bcryptjs')
 const { Subscription } = require('../helpers/constants')
 const SALT_WORK_FACTOR = 8
 
-// const { STARTER, PRO, BUSINESS } = Object.values(Subscription);
+// const { STARTER, PRO, BUSINESS } = Object.values(Subscription) 
 
 const Schema = mongoose.Schema
 
@@ -30,6 +31,16 @@ const userSchema = new Schema({
     type: String,
     default: null,
   },
+  avatar: {
+    type: String,
+    default: function () {
+      return gr.url(this.email, { s: '250'}, true)
+    }
+  },
+  idCloudAvatar: {
+    type: String,
+    default: null
+  }
 })
 
 // password encryption //

@@ -6,7 +6,10 @@
     "start": "cross-env NODE_ENV=production node ./bin/server.js",
     "start:dev": "cross-env NODE_ENV=development nodemon ./bin/server.js",
     "lint": "eslint **/*.js",
-    "lint:fix": "eslint --fix **/*.js"
+    "lint:fix": "eslint --fix **/*.js",
+    "lint:fix": "eslint --fix **/*.js",
+    "test": "cross-env NODE_ENV=test jest --no-cache --verbose --detectOpenHandles",
+    "test:coverage": "cross-env NODE_ENV=test jest --coverage"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -35,7 +38,9 @@
     "eslint-plugin-json": "^3.0.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
-    "nodemon": "2.0.7"
+    "jest": "^27.0.4",
+    "nodemon": "2.0.7",
+    "supertest": "^6.1.3"
   },
   "main": ".eslintrc.js",
   "bin": {
@@ -45,7 +50,7 @@
     "type": "git",
     "url": "git+https://github.com/Di-ua/nodejs-homework.git"
   },
-  "author": "Diana Kuzmina <di.ua@mail.ru>",
+  "author": "Diana Kuzmina",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/Di-ua/nodejs-homework/issues"

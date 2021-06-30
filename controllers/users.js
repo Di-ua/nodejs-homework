@@ -1,20 +1,23 @@
-const Users = require('../repositories/users');
-const { HttpCode } = require(''../helpers/constants')
+const Users = require('../repositories/users')
+const { HttpCode } = require('../helpers/constants')
 const jwt = require('jsonwebtoken')
+const fs = require('fs/promises')
+const UploadAvatarService = require('../services/cloud-upload')
+const AVATAR_OF_USERS = process.env.AVATAR_OF_USERS
 
 require('dotenv').config()
-const SECRET_KEY = process.env.SECRET_KEY;
+const SECRET_KEY = process.env.SECRET_KEY
 
 const signup = async (req, res, next) => {
   try {
-    const user = await Users.findByEmail(req.body.email);
+    const user = await Users.findByEmail(req.body.email)
 
     if (user) {
       return res.status(HttpCode.CONFLICT).json({
         Status: 'Conflict',
         Code: HttpCode.CONFLICT,
         ResponseBody: { message: 'Email in use' },
-      });
+      })
     }
 
     const { email, subscription } = await Users.createUser(req.body)
@@ -27,23 +30,22 @@ const signup = async (req, res, next) => {
   } catch (e) {
     next(e)
   }
-};
+}
 
 const login = async (req, res, next) => {
   try {
-    const user = await Users.findByEmail(req.body.email);
-    const isValidPassword = await user?.isValidPassword(req.body.password);
+    const user = await Users.findByEmail(req.body.email)
+    const isValidPassword = await user?.isValidPassword(req.body.password)
     if (!user || !isValidPassword) {
       return res.status(HttpCode.UNAUTHORIZED).json({
         Status: 'Unauthorized',
         Code: HttpCode.UNAUTHORIZED,
-        ResponseBody: { message: 'Email or password is wrong'
-     },
+        ResponseBody: { message: 'Email or password is wrong' },
       })
     }
     const id = user.id
     const payload = { id }
-    const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '2h' });
+    const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '2h' })
     await Users.updateToken(id, token)
     return res.json({
       Status: 'Success',
