@@ -5,9 +5,9 @@ const helmet = require('helmet')
 const rateLimit = require('express-rate-limit')
 const boolParser = require('express-query-boolean')
 const { HttpCode, limiterAPI } = require('./helpers/constants')
-require('dotenv').config();
-const AVATAR_OF_USERS = process.env.AVATAR_OF_USERS;
-const path = require('path')
+require('dotenv').config()
+// const AVATAR_OF_USERS = process.env.AVATAR_OF_USERS
+// const path = require('path')
 const app = express()
 
 const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short'

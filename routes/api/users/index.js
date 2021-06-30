@@ -13,6 +13,6 @@ router
   .post('/signup', validationCreateUser, ctrl.signup)
   .post('/login', validationCreateUser, ctrl.login)
   .post('/logout', guard, ctrl.logout)
-  .patch('/avatars', quard, upload.single('avatar'), ctrl.avatars)
+  .patch('/avatars', guard, upload.single('avatar'), ctrl.avatars)
 
 module.exports = router

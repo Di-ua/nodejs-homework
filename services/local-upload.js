@@ -7,6 +7,7 @@ class UploadAvatarService {
   constructor(folderAvatars) {
     this.folderAvatars = folderAvatars
   }
+
   async transformAvatar(pathFile) {
     const picture = await jimp.read(pathFile)
     await picture
@@ -16,8 +17,9 @@ class UploadAvatarService {
         250,
         jimp.HORIZONTAL_ALIGN_CENTER | jimp.VERTICAL_ALIGN_MIDDLE
       )
-      .writeAsync(pathFile),
+      .writeAsync(pathFile)
   }
+
   async saveAvatar({ userId, file }) {
     await this.transformAvatar(file.path)
     const folderUserAvatar = path.join(this.folderAvatars, userId)

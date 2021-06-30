@@ -24,7 +24,6 @@ if (process.env.NODE_ENV !== 'test') {
   })
 }
 
-
 mongoose.connection.on('error', (e) => {
   console.log(`Error mongoose connection ${e.message}`)
 })

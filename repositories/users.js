@@ -25,4 +25,5 @@ module.exports = {
   findByEmail,
   createUser,
   updateToken,
+  updateAvatar
 }

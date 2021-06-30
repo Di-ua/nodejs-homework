@@ -1,5 +1,5 @@
 const { HttpCode } = require('../helpers/constants')
-const Contacts = require('../repositories/contacts.js'),
+const Contacts = require('../repositories/contacts.js')
 
 const getAll = async (req, res, next) => {
   try {
@@ -16,7 +16,7 @@ const getAll = async (req, res, next) => {
   } catch (e) {
     next(e) 
   }
-},
+}
 
 const getById = async (req, res, next) => {
   try {
@@ -35,7 +35,7 @@ const getById = async (req, res, next) => {
   } catch (e) {
     next(e) 
   }
-},
+}
 
 const addContact = async (req, res, next) => {
   try {
@@ -47,7 +47,7 @@ const addContact = async (req, res, next) => {
   } catch (e) {
     next(e) 
   }
-},
+}
 
 const removeContact = async (req, res, next) => {
   try {

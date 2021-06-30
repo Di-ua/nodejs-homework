@@ -1,5 +1,5 @@
 const Joi = require('joi')
-const mongoose = require('mongoose')
+// const mongoose = require('mongoose')
 
 const schemaCreateUser = Joi.object({
   email: Joi.string().email({ minDomainSegments: 2 }).required(),

@@ -1,5 +1,5 @@
 const multer = require('multer')
-const path = require('path')
+// const path = require('path')
 const { HttpCode } = require('./constants')
 require('dotenv').config()
 const UPLOAD_DIR = process.env.UPLOAD_DIR
