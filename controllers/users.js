@@ -4,9 +4,17 @@ const jwt = require('jsonwebtoken')
 const fs = require('fs/promises')
 const UploadAvatarService = require('../services/cloud-upload')
 
-require('dotenv').config()
 const SECRET_KEY = process.env.SECRET_KEY
 // const AVATAR_OF_USERS = process.env.AVATAR_OF_USERS
+
+const EmailService = require('../services/email')
+const {
+  CreateSenderNodemailer,
+  CreateSenderSendGrid,
+} = require('../services/email-sender')
+
+require('dotenv').config()
+
 
 const signup = async (req, res, next) => {
   try {
@@ -81,48 +89,86 @@ const logout = async (req, res, next) => {
 
 const avatars = async (req, res, next) => {
   try {
-    const id = req.user.id
-    const uploads = new UploadAvatarService()
+    const id = req.user.id 
+    const uploads = new UploadAvatarService() 
     const { idCloudAvatar, avatarUrl } = await uploads.saveAvatar(
       req.file.path,
       req.user.idCloudAvatar
-    )
+    ) 
 
-    await fs.unlink(req.file.path)
-    await Users.updateAvatar(id, avatarUrl, idCloudAvatar)
+    await fs.unlink(req.file.path) 
+    await Users.updateAvatar(id, avatarUrl, idCloudAvatar) 
     return res.json({
-      Status: 'Success',
+      Status: ' Success' ,
       CODE: HttpCode.OK,
       data: { avatarUrl },
-    })
+    }) 
   } catch (e) {
-    next(e)
+    next(e) 
   }
 }
 
-// local upload
+const verify = async (req, res, necx) => {
+try {
+const user = await Users.findByVerifyToken(req.params.token) 
+if (user) {
+  await Users.updateTokenVerify(user.id, true, null) 
+  return res.json({
+    Status: 'Success',
+    CODE: HttpCode.OK,
+    data: { message: 'Success!' },
+  }) 
+}
+return res.status(HttpCode.BAD_REQUEST).json({
+  Status: 'Bad Request',
+  CODE: HttpCode.BAD_REQUEST,
+  data: { message: 'Verification token isn`t valid' },
+}) 
+} catch (err) {
+console.log(err.massege) 
+}
+} 
 
-// const avatars = async (req, res, next) => {
-//   try {
-//     const id = req.user.id;
-//     const uploads = new UploadAvatarService(AVATAR_OF_USERS);
-//     const avatarUrl = await uploads.saveAvatar({ userId: id, file: req.file });
+const repeatEmailVerification = async (req, res, next) => {
+try {
+const user = await Users.findByEmail(req.body.email) 
+console.log(user) 
+if (user) {
+  const { name, email, verify, verifyToken } = user 
+  if (!verify) {
+    const emailService = new EmailService(
+      process.env.NODE_ENV,
+      //new CreateSenderNodemailer()
+      new CreateSenderSendGrid()
+    ) 
+    await emailService.sendVerifyEmail(verifyToken, email, name) 
+    return res.json({
+      Status: 'Success',
+      CODE: HttpCode.OK,
+      data: { message: 'Resubmitted success!' },
+    }) 
+  }
+  return res.status(HttpCode.CONFLICT).json({
+    Status: 'Conflict',
+    Code: HttpCode.CONFLICT,
+    ResponseBody: { message: 'Email has been already verified' },
+  }) 
+}
+return res.status(HttpCode.NOT_FOUND).json({
+  status: 'Not Found',
+  code: HttpCode.NOT_FOUND,
+  message: 'User not Found',
+}) 
+} catch (error) {
+next(error) 
+}
+} 
 
-//     try {
-//       await fs.unlink(path.join(AVATAR_OF_USERS, req.user.avatar));
-//     } catch (e) {
-//       console.log(e.message);
-//     }
-
-//     await Users.updateAvatar(id, avatarUrl);
-//     return res.json({
-//       Status: 'Success',
-//       CODE: HttpCode.OK,
-//       ResponseBody: { avatarUrl },
-//     });
-//   } catch (e) {
-//     next(e);
-//   }
-// }
-
-module.exports = { signup, login, logout, avatars }
+module.exports = {
+signup,
+login,
+logout,
+avatars,
+verify,
+repeatEmailVerification,
+} 
